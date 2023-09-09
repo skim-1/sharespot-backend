@@ -1,0 +1,14 @@
+
+user-id:{
+user email
+user password
+usb-ids : []}
+
+
+
+
+usb-hash :{
+locations[n]
+text[n]
+image[n]
+userid}
