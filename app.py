@@ -60,8 +60,8 @@ def login():
 def addusb():
     f = request.json
     usbs = import_hash()
-
-    hash = sha256(str(len(locations["hashes"])).encode('utf-8')).hexdigest()
+    print(f)
+    hash = sha256(str(len(usbs["hashes"])).encode('utf-8')).hexdigest()
 
     usbs["hashes"].append(
         {
@@ -75,7 +75,14 @@ def addusb():
                 }],
         })
 
-    dump_hash(locations)
+    users = import_logins()
+
+    for x in users['user-ids']:
+        if x['user email'] == f['user email']:
+            users['usbs'].append(hash)
+
+    dump_logins(users)
+    dump_hash(usbs)
 
     return hash
 
