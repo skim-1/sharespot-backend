@@ -101,7 +101,13 @@ def addlocation():
                 return 'error: usb not found'
     except:
         return 'error: add request failed'
-        
+
+
+@app.route('/getusbs', methods=['GET'])
+@cross_origin()
+def getusbs():
+    usbs = import_hash()
+    return usbs
 
 
 if __name__ == '__main__':
