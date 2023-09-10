@@ -26,16 +26,19 @@ def dump_hash(injson):
 @cross_origin()
 def createLogin():
     f = request.json
-
     logs = import_logins()
 
-    for x in logs['user-ids']:
-        if x['user email'] == f['user email']:
-            return 'failed, account already exists'
+    try:
 
-    logs['user-ids'].append({'user email': f['user email'], 'user password': f['user password'], 'usbs': []})
-    dump_logins(logs)
-    return 'success'
+        for x in logs['user-ids']:
+            if x['user email'] == f['user email']:
+                return 'failed, account already exists'
+
+        logs['user-ids'].append({'user email': f['user email'], 'user password': f['user password'], 'usbs': []})
+        dump_logins(logs)
+        return {"create_status": "success"}.headers.add('Access-Control-Allow-Origin', '*')
+    except:
+        return {"create_status": "failed"}
 
 
 @app.route('/login', methods=['POST'])
@@ -46,14 +49,18 @@ def login():
     logs = import_logins()
 
     for x in logs['user-ids']:
-        if x['user email'] == f['user email']:
-            if x['user password'] == f['user password']:
-                return 'authentication success'
+        if x['user email'] == f['user email']['username']:
+            if x['user password'] == f['user password']['password']:
+                return {"authentication_status": "success"}
             else:
-                return 'authentication failed'
+                return {"authentication_status":"failed"}
 
-    return 'account does not exist'
+    return {"authentication_status": "does not exist"}
 
+@app.route('/ping', methods=['GET'])
+@cross_origin()
+def ping():
+    return 'pong'
 
 @app.route('/addusb', methods=['POST'])
 @cross_origin()
@@ -93,6 +100,7 @@ def addlocation():
     f = request.json
     usbs = import_hash()
 
+
     try:
         for x in usbs["hashes"]:
             if x['hash'] == f['hash']:
@@ -104,8 +112,7 @@ def addlocation():
                         'userid':f['userid']
                     }
                 )
-            else:
-                return 'error: usb not found'
+            return 'error: usb not found'
     except:
         return 'error: add request failed'
 
@@ -116,6 +123,20 @@ def getusbs():
     usbs = import_hash()
     return usbs
 
+@app.route('/getusb', methods=['POST'])
+@cross_origin()
+def getusb():
+    f = request.json
+    usbs = import_hash()
+    try:
+        for x in usbs["hashes"]:
+            print('\n')
+            if (x["hash"] == f["usb-hash"]):
+                return x
+        return {"status": "usb not found"}
+    except:
+        return {"status": "post request not successful"}
 
 if __name__ == '__main__':
-    app.run(debug=True)
+   app.run(debug=True)
+    ##app.run("0.0.0.0")
