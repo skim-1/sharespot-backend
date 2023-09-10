@@ -75,6 +75,13 @@ def addusb():
                 }],
         })
 
+    users = import_logins()
+
+    for x in users['user-ids']:
+        if x['user email'] == f['user email']:
+            users['usbs'].append(hash)
+
+    dump_logins(users)
     dump_hash(usbs)
 
     return hash
