@@ -1,10 +1,16 @@
 
-user-id:{
+user-ids:{
 user email
 user password
 usb-ids : []}
 
 
+usb-hash : [
+	asdihfq93b8h329fol8irgoa;w8eugh: {
+		lcation: ...
+
+	}
+]
 
 
 usb-hash :{
@@ -12,3 +18,9 @@ locations[n]
 text[n]
 image[n]
 userid}
+
+
+functions:
+	- login -- return if login success
+	- create login -- create creden[tials
+	- 
